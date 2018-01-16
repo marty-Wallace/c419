@@ -5,12 +5,13 @@ package c419Lab2;
 
 // TODO: there are 3 "to do" items below
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
 
 public class SortedBucketListTest {
 
@@ -72,11 +73,9 @@ public class SortedBucketListTest {
 	@Test
 	public void test2() {
 		// BucketList constructor takes (min,max,numBuckets)
-		b = new BucketList<String>(0,100,5);
+		b = new BucketList<>(0,100,5);
 		b.addAll(everyone);
 
-		//TODO:
-		
 		// Figure out (on paper?) where these 6 Entry objects should
 		// be in the case of 5 buckets. Then build a test
 		// like in test1() to check each of the 5 buckets
@@ -86,31 +85,50 @@ public class SortedBucketListTest {
 		// that testing the corresponding bucket is easier.
 
 		// Use whichever lists you need (see test1() )
-		/*
-		ArrayList<Entry<String>> list0 = new ArrayList<>();
-		ArrayList<Entry<String>> list1 = new ArrayList<>();
-		ArrayList<Entry<String>> list2 = new ArrayList<>();
-		ArrayList<Entry<String>> list3 = new ArrayList<>();
-		ArrayList<Entry<String>> list4 = new ArrayList<>();
 
-		list4.add(Aplus); // ... add rest of Entry objects
-		*/
-		
+		ArrayList<Entry<String>> list3 = new ArrayList<>();
+
+		list3.add(C);
+		list3.add(B);
+
+		ArrayList<Entry<String>> list4 = new ArrayList<>();
+		list4.add(A);
+		list4.add(val);
+		list4.add(jim);
+		list4.add(Aplus);
+
 		assertTrue(b.getBucket(0).isEmpty() // complete this test
-					// &&... (add 
+                && b.getBucket(1).isEmpty()
+				&& b.getBucket(2).isEmpty()
+				&& b.getBucket(3).equals(list3)
+                && b.getBucket(4).equals(list4)
 				    );
 	}
 
 	@Test
 	public void test3() {
 		// BucketList constructor takes (min,max,numBuckets)
-		b = new BucketList<String>(0,100,4);
+		b = new BucketList<>(0,100,4);
 		b.addAll(everyone);
 		
-		//TODO:
 		// Write this test similar to test2(). But this time these
 		// six Entry Objects are added into a BucketList with 4 buckets
-		assertTrue(true); // change this assert
+
+		ArrayList<Entry<String>> list2 = new ArrayList<>();
+
+		list2.add(C);
+		list2.add(B);
+
+		ArrayList<Entry<String>> list3 = new ArrayList<>();
+		list3.add(A);
+		list3.add(val);
+		list3.add(jim);
+		list3.add(Aplus);
+		assertTrue(b.getBucket(0).isEmpty()
+				&& b.getBucket(1).isEmpty()
+				&& b.getBucket(2).equals(list2)
+				&& b.getBucket(3).equals(list3)
+		);
 	}
 	
 	@Test
@@ -129,7 +147,7 @@ public class SortedBucketListTest {
 		// be placed in a BucketList which stores grades from 0 to 100 and
 		// having 10 buckets.
 		
-		b = new BucketList<String>(0,100,10);
+		b = new BucketList<>(0,100,10);
 		b.add(new Entry<>(100,"perfect"));
 		assertTrue(b.getBucket(9).size()==1); 
 	}
@@ -138,7 +156,7 @@ public class SortedBucketListTest {
 	public void outOfBoundsTest1() {
 		// tests if we can add an Entry with key value larger than max
 		
-		b = new BucketList<String>(0,100,10);
+		b = new BucketList<>(0,100,10);
 		b.add(new Entry<>(110,"superPerfect"));
 		assertTrue(b.getBucket(9).size()==1); 
 	}
@@ -152,10 +170,35 @@ public class SortedBucketListTest {
 		assertTrue(b.getBucket(0).size()==1); 
 	}
 
+	/**
+	 * Tests that the list is in sorted order
+	 */
 	@Test
 	public void additionalTest() {
-		//TODO: Write an additional test that
+		//Write an additional test that
 		//is different from the above
+		b = new BucketList<>(0,100,10);
+		b.addAll(everyone);
+
+        Entry<String> marty = new Entry<>(108, "Marty");
+        Entry<String> youngdum = new Entry<>(-18, "Young Dum");
+
+        b.add(marty);
+        b.add(youngdum);
+
+        ArrayList<Entry<String>> sorted = new ArrayList<>();
+
+        sorted.add(youngdum);
+		sorted.add(C);
+		sorted.add(B);
+		sorted.add(A);
+		sorted.add(val);
+		sorted.add(jim);
+		sorted.add(Aplus);
+		sorted.add(marty);
+
+		assertTrue(b.getSortedOrder().equals(sorted));
+
 	}
 
 }
