@@ -1,4 +1,4 @@
-package c419Lab2;
+package labs.lab2;
 
 import java.util.ArrayList;
 import java.util.Collection;

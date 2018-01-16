@@ -1,4 +1,4 @@
-package c419Lab2;
+package labs.lab2;
 
 /* There is no need to modify this class. You may modify the class
    if you know what you are doing, and want to add functionality

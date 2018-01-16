@@ -1,4 +1,4 @@
-package c419Lab2;
+package labs.lab2;
 
 // This file will pass all tests without errors when BucketList
 // and SortedBucket are implemented
