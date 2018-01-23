@@ -2,7 +2,6 @@ package labs.lab2;
 
 import java.util.ArrayList;
 
-//TODO: 1 "to do" item below
 
 public class SortedBucket<V> implements SortedBucketADT<V>{
 

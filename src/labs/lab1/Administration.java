@@ -30,7 +30,7 @@ public class Administration {
      */
     public ArrayList<Student> intersection(Student[] class1,Student[] class2){
         ArrayList<Student> list = new ArrayList<>();
-        //TODO: alter this method to conform to the expected test result in AdministrationTest in the case of an empty list
+        //alter this method to conform to the expected test result in AdministrationTest in the case of an empty list
         
         for (Student stud1: class1){
             for (Student stud2: class2){

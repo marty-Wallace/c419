@@ -3,8 +3,6 @@ package labs.lab2;
 // This file will pass all tests without errors when BucketList
 // and SortedBucket are implemented
 
-// TODO: there are 3 "to do" items below
-
 
 import org.junit.Before;
 import org.junit.Test;

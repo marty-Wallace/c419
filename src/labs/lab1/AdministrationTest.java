@@ -53,7 +53,7 @@ public class AdministrationTest {
 
 
     /**
-     * notice how this test fails. Alter the intersection method (by following the TODO)
+     * notice how this test fails. Alter the intersection method
      * to account for this in some way.
      */
     @Test
