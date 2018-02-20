@@ -70,7 +70,7 @@ public class Requests implements Iterable<Customer> {
 
 			@Override
 			public Customer next() {
-				//the cusomters in Platinum go first (if any), the customers in Gold go next (if any), etc.
+				//the customers in Platinum go first (if any), the customers in Gold go next (if any), etc.
                 int tempIndex = index;
                 int loyaltyIndex = 0;
                 for(int i = 0; i < reqs.size(); i++) {
