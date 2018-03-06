@@ -2,103 +2,106 @@ package labs.lab7;
 
 public class SequenceAlignment {
 
-    // static String s = "GATTACA";
-    // static String t = "ATTACCA";
+    public static final int MATCH = 4;
+    public static final int NO_MATCH = 3;
+    public static final int SKIP_RIGHT = 2;
+    public static final int SKIP_LEFT = 1;
 
-    static String s = "ATCGACTAATAATATAATTTATATATATACTGACTAGGCTAG";
-    static String t = "GATCGACTAGCTAGCATATATATTTTAATTAATTATATGCTG";
+    public static final int MATCH_VALUE = 1;
+    public static final int NO_MATCH_PENALTY = -2;
+    public static final int SKIP_LEFT_PENALTY = -1;
+    public static final int SKIP_RIGHT_PENALTY = -1;
 
-    static int [][] traceback = new int[s.length()+1][t.length()+1];
-    static int [][] solution = new int[s.length()+1][t.length()+1];
+
+    // static String left = "GATTACA";
+    // static String right = "ATTACCA";
+
+    static String left = "ATCGACTAATAATATAATTTATATATATACTGACTAGGCTAG";
+    static String right = "GATCGACTAGCTAGCATATATATTTTAATTAATTATATGCTG";
+
+    static int [][] traceback = new int[left.length()+1][right.length()+1];
+    static int [][] solution = new int[left.length()+1][right.length()+1];
 
     public static void main(String[] args){
-        int m = s.length();
-        int n = t.length();
+        int ell = left.length();
+        int arr = right.length();
 
-        System.out.println("Best value of sequence alignment is: " + sequence_alignment(m, n));
+        System.out.println("Best value of sequence alignment is: " + sequence_alignment(ell, arr));
 
         StringBuilder a1 = new StringBuilder();
         StringBuilder a2 = new StringBuilder();
 
-        while (m>0 || n>0) {
-
-            if(m == 0) {
+        while (ell > 0 || arr > 0) {
+            if (traceback[ell][arr] == MATCH) {
+                a1.insert(0, left.charAt(ell--));
+                a2.insert(0, right.charAt(arr--));
+            }
+            else if (ell == 0 || traceback[ell][arr] == SKIP_LEFT) {
                 a1.insert(0, '-');
-                a2.insert(0, t.charAt(n - 1));
-                n--;
-            }else if(n == 0) {
-                a1.insert(0, s.charAt(m - 1));
+                a2.insert(0, right.charAt(arr--));
+            }
+            else if (arr == 0 || traceback[ell][arr] == SKIP_RIGHT) {
                 a2.insert(0, '-');
-                m--;
+                a1.insert(0, left.charAt(ell--));
             }
-            else if (traceback[m][n] == 4) {
-                a1.insert(0, s.charAt(m - 1));
-                a2.insert(0, t.charAt(n - 1));
-                m--; n--;
+            else if (traceback[ell][arr] == NO_MATCH) {
+                a1.insert(0, left.charAt(ell--));
+                a2.insert(0, right.charAt(arr--));
             }
-            else if (traceback[m][n] == 1) {
-                a1.insert(0, '-');
-                a2.insert(0, t.charAt(n -1));
-                n--;
+            else {
+                System.out.println("Critical error");
+                throw new RuntimeException("Unknown Number in traceback table");
             }
-            else if (traceback[m][n] == 2) {
-                a1.insert(0, s.charAt(m - 1));
-                a2.insert(0, '-');
-                m--;
-            }
-            else if (traceback[m][n] == 3) {
-                a1.insert(0, s.charAt(m - 1));
-                a2.insert(0, t.charAt(n - 1));
-                m--;
-                n--;
-            }
-            else { System.out.println("Critical error"); }
         }
         System.out.println(a1);
         System.out.println(a2);
 
     }
 
-    static int sequence_alignment(int m, int n) {
-        if (m == 0 && n == 0){
+    static int sequence_alignment(int ell, int arr) {
+        if (ell == 0 && arr == 0){
             return 0;
         }
-        if (m == 0){
-            int a = sequence_alignment(m, n-1) - 1;
-            traceback[m][n] = 1;
-            solution[m][n] = a;
-            return a;
+        if (solution[ell][arr] != 0) {
+            return solution[ell][arr];
         }
-        if (n == 0){
-            int b = sequence_alignment(m-1, n) - 1;
-            traceback[m][n] = 2;
-            solution[m][n] = b;
-            return b;
+        if(ell == 0) {
+            int leftSkipValue = sequence_alignment(ell, arr-1) - SKIP_LEFT_PENALTY;
+            traceback[ell][arr] = SKIP_LEFT;
+            solution[ell][arr] = leftSkipValue;
+            return leftSkipValue;
         }
-        if (solution[m][n] != 0) return solution[m][n];
-        if (s.charAt(m-1) == t.charAt(n-1)) {
-            traceback[m][n]=4;
-            solution[m][n] = 1 + sequence_alignment(m-1, n-1);
-            return solution[m][n];
+        if(arr == 0) {
+            int rightSkipValue = sequence_alignment(ell-1, arr) - SKIP_RIGHT_PENALTY;
+            traceback[ell][arr] = SKIP_RIGHT;
+            solution[ell][arr] = rightSkipValue;
+            return rightSkipValue;
         }
-        int a = sequence_alignment(m, n-1) - 1;
-        int b = sequence_alignment(m-1, n) - 1;
-        int c = sequence_alignment(m-1, n-1) - 2;
 
-        if (a >= b && a >= c) {
-            traceback[m][n]=1;
-            solution[m][n]=a;
-            return a;
+        if (left.charAt(ell-1) == right.charAt(arr-1)) {
+            traceback[ell][arr] = MATCH;
+            solution[ell][arr] = sequence_alignment(ell-1, arr-1) + MATCH_VALUE;
+            return solution[ell][arr];
         }
-        else if(b >= a && b >= c) {
-            traceback[m][n]=2;
-            solution[m][n]=b;
-            return b;
+
+        int leftSkipValue = sequence_alignment(ell, arr-1) - SKIP_LEFT_PENALTY;
+        int rightSkipValue = sequence_alignment(ell-1, arr) - SKIP_RIGHT_PENALTY;
+        int noMatchValue = sequence_alignment(ell-1, arr-1) - NO_MATCH_PENALTY;
+
+        if (leftSkipValue >= rightSkipValue && leftSkipValue >= noMatchValue) {
+            traceback[ell][arr] = SKIP_LEFT;
+            solution[ell][arr] = leftSkipValue;
+            return leftSkipValue;
+        }
+        else if(rightSkipValue >= leftSkipValue && rightSkipValue >= noMatchValue) {
+            traceback[ell][arr] = SKIP_RIGHT;
+            solution[ell][arr] = rightSkipValue;
+            return rightSkipValue;
         }
         else {
-            traceback[m][n]=3;
-            solution[m][n]=c;
-            return c;
+            traceback[ell][arr] = NO_MATCH;
+            solution[ell][arr] = noMatchValue;
+            return noMatchValue;
         }
     }
 }

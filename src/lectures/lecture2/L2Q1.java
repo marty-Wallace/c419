@@ -1,5 +1,7 @@
 package lectures.lecture2;
 
+import labs.lab6.BoyerMoore;
+
 public class L2Q1 {
 
     public static void main(String[] args) {
